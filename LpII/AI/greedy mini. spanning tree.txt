@@ -1,0 +1,258 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+// Number of vertices in the graph
+#define V 5
+
+// Function to find the vertex with the minimum key value, from the set of vertices not yet included in MST
+int minKey(int key[], bool mstSet[])
+{
+    int min = INT_MAX, min_index;
+
+    for (int v = 0; v < V; v++)
+        if (!mstSet[v] && key[v] < min)
+            min = key[v], min_index = v;
+
+    return min_index;
+}
+
+// Function to print the constructed MST stored in parent[]
+void printMST(int parent[], int graph[V][V])
+{
+    cout << "Edge \tWeight\n";
+    for (int i = 1; i < V; i++)
+        cout << parent[i] << " - " << i << " \t" << graph[i][parent[i]] << "\n";
+}
+
+// Function to construct and print MST using Prim's Greedy algorithm
+// Implement Greedy search algorithm for any of the following application:
+void primMST(int graph[V][V])
+{
+    int parent[V];   // Array to store constructed MST
+    int key[V];      // Key values used to pick minimum weight edge
+    bool mstSet[V];  // To represent set of vertices included in MST
+
+    // Initialize all keys as INFINITE
+    for (int i = 0; i < V; i++)
+        key[i] = INT_MAX, mstSet[i] = false;
+
+    // Always include first vertex in MST
+    key[0] = 0;     // Make key 0 so that this vertex is picked as the first vertex
+    parent[0] = -1; // First node is always the root of MST
+
+    for (int count = 0; count < V - 1; count++) {
+        int u = minKey(key, mstSet);
+
+        // Add the picked vertex to the MST Set
+        mstSet[u] = true;
+
+        for (int v = 0; v < V; v++)
+            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v])
+                parent[v] = u, key[v] = graph[u][v];
+    }
+
+    // Print the MST
+    printMST(parent, graph);
+}
+
+int main()
+{
+    int graph[V][V] = {{0, 2, 0, 6, 0},
+                       {2, 0, 3, 8, 5},
+                       {0, 3, 0, 0, 7},
+                       {6, 8, 0, 0, 9},
+                       {0, 5, 7, 9, 0}};
+
+    cout << "Minimum Spanning Tree using Prim's Algorithm (Greedy):\n";
+    primMST(graph);
+
+    return 0;
+}
+
+//  Key Terminologies in Minimum Cost Spanning Tree (MST)
+// 1. Graph
+// A graph is a collection of vertices (nodes) connected by edges.
+
+// In the context of MST, we consider connected, undirected, and weighted graphs.
+
+// 2. Spanning Tree
+// A spanning tree of a graph is a subgraph that includes all the vertices of the original graph connected by the minimum number of edges (i.e., 
+// 𝑉
+// −
+// 1
+// V−1 edges for 
+// 𝑉
+// V vertices) without any cycles.
+
+// 3. Minimum Spanning Tree (MST)
+// An MST is a spanning tree with the minimum possible total edge weight among all possible spanning trees of the graph.
+
+// It ensures all vertices are connected with the least total cost.
+
+// 4. Prim's Algorithm
+// Prim's Algorithm is a greedy algorithm that constructs an MST by:
+
+// Starting with an arbitrary vertex.
+
+// At each step, adding the smallest weight edge that connects a vertex in the growing MST to a vertex outside it.
+
+// Repeating until all vertices are included in the MST.
+
+// ⏱️ Time and Space Complexities of Prim's Algorithm
+// The complexities of Prim's Algorithm depend on the data structures used for graph representation and the priority queue. Let's analyze the complexities for the provided C++ code, which uses an adjacency matrix and a simple array-based implementation.
+
+// Time Complexity
+// Using Adjacency Matrix and Simple Arrays (as in the provided code):
+
+// For each of the 
+// 𝑉
+// V vertices, the algorithm selects the minimum key value not yet included in the MST. This selection takes 
+// 𝑂
+// (
+// 𝑉
+// )
+// O(V) time.
+
+// For each selected vertex, it examines all 
+// 𝑉
+// V vertices to update the key values, resulting in 
+// 𝑂
+// (
+// 𝑉
+// )
+// O(V) time per vertex.
+
+// Therefore, the total time complexity is:
+
+// 𝑂
+// (
+// 𝑉
+// 2
+// )
+// O(V 
+// 2
+//  )
+// Using Adjacency List and Min-Heap (Optimized Implementation):
+
+// Selecting the minimum key vertex takes 
+// 𝑂
+// (
+// log
+// ⁡
+// 𝑉
+// )
+// O(logV) time using a min-heap.
+
+// Updating the key values for adjacent vertices takes 
+// 𝑂
+// (
+// log
+// ⁡
+// 𝑉
+// )
+// O(logV) time per edge.
+
+// For all 
+// 𝐸
+// E edges, the total time complexity becomes:
+
+// 𝑂
+// (
+// (
+// 𝑉
+// +
+// 𝐸
+// )
+// log
+// ⁡
+// 𝑉
+// )
+// O((V+E)logV)
+// This is more efficient for sparse graphs where 
+// 𝐸
+// E is much less than 
+// 𝑉
+// 2
+// V 
+// 2
+//  .
+
+// Space Complexity
+// Adjacency Matrix Representation:
+
+// Requires 
+// 𝑂
+// (
+// 𝑉
+// 2
+// )
+// O(V 
+// 2
+//  ) space to store the graph.
+
+// Additional arrays for key values, parent tracking, and MST set take 
+// 𝑂
+// (
+// 𝑉
+// )
+// O(V) space.
+
+// Total space complexity:
+
+// 𝑂
+// (
+// 𝑉
+// 2
+// )
+// O(V 
+// 2
+//  )
+// Adjacency List Representation:
+
+// Requires 
+// 𝑂
+// (
+// 𝑉
+// +
+// 𝐸
+// )
+// O(V+E) space to store the graph.
+
+// Additional space for the min-heap and arrays is 
+// 𝑂
+// (
+// 𝑉
+// )
+// O(V).
+
+// Total space complexity:
+
+// 𝑂
+// (
+// 𝑉
+// +
+// 𝐸
+// )
+// O(V+E)
+
+
+// time complexity:pow(b,d) for both;
+
+// 🌿 Branching Factor (b)
+// Definition: The average number of child nodes per parent node in a tree or graph.
+
+// Example: In a binary tree, each node has at most 2 children, so the branching factor b = 2.
+// ScienceDirect
+// +1
+// Lark
+// +1
+
+// 🌿 Depth (d)
+// Definition: The number of levels from the root node to the goal node in a tree or graph.
+
+// Example: If the goal node is 3 levels away from the root, then the depth d = 3.
+
+

@@ -1,0 +1,155 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <unordered_set>
+#include <algorithm>
+
+using namespace std;
+
+// Structure for the puzzle state
+struct Node {
+    vector<vector<int>> puzzle;
+    int g, h; // g: depth, h: heuristic (misplaced tiles)
+    int x, y; // Position of the empty tile (0)
+    string path; // Path to reach this state
+
+    // Comparator for priority queue (min-heap based on f = g + h)
+    bool operator>(const Node &other) const {
+        return (g + h) > (other.g + other.h);
+    }
+};
+
+// Directions for moving the empty tile (Up, Down, Left, Right)
+vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+// Heuristic function: Count of misplaced tiles
+int misplacedTiles(const vector<vector<int>> &puzzle, const vector<vector<int>> &goal) {
+    int count = 0;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (puzzle[i][j] != 0 && puzzle[i][j] != goal[i][j]) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+// Function to print the puzzle grid
+void printPuzzle(const vector<vector<int>> &puzzle) {
+    for (const auto &row : puzzle) {
+        for (int num : row) {
+            if (num == 0) cout << "_ ";
+            else cout << num << " ";
+        }
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+// Function to check if two puzzles are the same
+bool isGoal(const vector<vector<int>> &puzzle, const vector<vector<int>> &goal) {
+    return puzzle == goal;
+}
+
+// A* Algorithm for 8-Puzzle Problem
+string aStar8Puzzle(vector<vector<int>> start, vector<vector<int>> goal) {
+    priority_queue<Node, vector<Node>, greater<Node>> pq;
+    unordered_set<string> visited;
+
+    // Find the initial position of the empty tile (0)
+    int startX, startY;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (start[i][j] == 0) {
+                startX = i;
+                startY = j;
+            }
+        }
+    }
+
+    // Initial Node
+    pq.push({start, 0, misplacedTiles(start, goal), startX, startY, ""});
+
+    while (!pq.empty()) {
+        Node current = pq.top();
+        pq.pop();
+
+        if (isGoal(current.puzzle, goal)) {
+            cout << "Goal state reached!\n";
+            printPuzzle(current.puzzle);
+            return "Steps: " + to_string(current.g);
+        }
+
+        // Generate a unique string for the current state
+        string state = "";
+        for (auto &row : current.puzzle)
+            for (int num : row)
+                state += to_string(num);
+
+        if (visited.count(state)) continue;
+        visited.insert(state);
+
+        // Display current state
+        cout << "Current Step: " << current.g << "\n";
+        printPuzzle(current.puzzle);
+
+        // Explore neighbors
+        for (auto &[dx, dy] : directions) {
+            int nx = current.x + dx, ny = current.y + dy;
+
+            if (nx >= 0 && nx < 3 && ny >= 0 && ny < 3) {
+                vector<vector<int>> nextPuzzle = current.puzzle;
+                swap(nextPuzzle[current.x][current.y], nextPuzzle[nx][ny]);
+                pq.push({nextPuzzle, current.g + 1, misplacedTiles(nextPuzzle, goal), nx, ny, current.path});
+            }
+        }
+    }
+
+    return "No Solution Found";
+}
+
+int main() {
+    vector<vector<int>> start = {{2,8,3}, {1,6,4}, {7,0,5}};
+    vector<vector<int>> goal = {{1, 2, 3}, {8,0,4}, {7,6,5}};
+
+    cout << aStar8Puzzle(start, goal) << endl;
+
+    return 0;
+}
+
+
+// Time and Space Complexities of A Algorithm:*
+// Branching Factor (b): The average number of child nodes generated from any node in the search tree.
+
+// Solution Depth (d): The depth of the optimal solution from the starting node.
+
+// 1. Time Complexity:
+// The time complexity of A* algorithm in the worst case is:
+
+// pow(b,d)
+// This is because A* can potentially explore all nodes up to depth 
+// 𝑑
+// d in the search tree.
+
+// However, the exact time complexity depends on the quality of the heuristic (h(n)):
+
+// If the heuristic is admissible and consistent, A* will explore fewer nodes.
+
+// A poor heuristic (overestimating or inconsistent) can make A* behave like an uninformed search.
+
+// 2. Space Complexity:
+// The space complexity is also:
+// pow(b,d)
+// This is because A* maintains both the Open List (Priority Queue) and Closed List, which can store all explored nodes.
+
+// A* is memory-intensive because it stores all generated nodes, which leads to high space usage.
+
+// Why A is Both Time and Space Intensive?*
+// The algorithm is time-efficient when the heuristic is strong (guides search directly towards the goal).
+
+// But it is space-intensive because it must remember all explored and frontier nodes (Open and Closed Lists).
+
+// Would you like me to show you some techniques to optimize the time and space complexity of A*?
+
+// Let me know. 🙂

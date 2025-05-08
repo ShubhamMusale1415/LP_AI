@@ -1,0 +1,196 @@
+// Implement depth first search algorithm and Breadth First Search algorithm, Use an undirected
+// graph and develop a recursive algorithm for searching all the vertices of a graph or tree data
+// structure. 
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+
+using namespace std;
+
+// Graph class using adjacency list
+class Graph {
+private:
+    unordered_map<int, vector<int>> adjList; // Adjacency list
+
+public:
+    // Add an edge (undirected)
+    void addEdge(int u, int v) {
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+    }
+
+    // Recursive DFS
+    void DFS(int start, unordered_set<int> &visited) {
+        visited.insert(start);
+        cout << start << " ";
+
+        for (int neighbor : adjList[start]) {
+            if (visited.find(neighbor) == visited.end()) {
+                DFS(neighbor, visited);
+            }
+        }
+    }
+
+    // Public function to initiate DFS
+    void depthFirstSearch(int start) {
+        unordered_set<int> visited;
+        cout << "DFS Traversal: ";
+        DFS(start, visited);
+        cout << endl;
+    }
+
+    // Iterative BFS
+    void breadthFirstSearch(int start) {
+        unordered_set<int> visited;
+        queue<int> q;
+
+        visited.insert(start);
+        q.push(start);
+
+        cout << "BFS Traversal: ";
+
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            cout << node << " ";
+
+            for (int neighbor : adjList[node]) {
+                if (visited.find(neighbor) == visited.end()) {
+                    visited.insert(neighbor);
+                    q.push(neighbor);
+                }
+            }
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    Graph g;
+
+    // Adding edges to create an undirected graph
+    g.addEdge(1, 2);
+    g.addEdge(1, 3);
+    g.addEdge(2, 4);
+    g.addEdge(2, 5);
+    g.addEdge(3, 6);
+    g.addEdge(3, 7);
+
+    // Performing DFS and BFS
+    cout << "Starting DFS and BFS from Node 1:\n";
+    g.depthFirstSearch(1);
+    g.breadthFirstSearch(1);
+
+    return 0;
+}
+
+
+// explanation of the code:
+
+// Important Terms for DFS and BFS:
+// 1. Graph:
+// A collection of nodes (vertices) and edges connecting them.
+
+// Can be directed (edges have direction) or undirected (edges are bidirectional).
+
+// 2. Vertex (Node):
+// A point in the graph representing an entity.
+
+// 3. Edge:
+// A connection between two vertices in a graph.
+
+// In an undirected graph, edges are bidirectional (A-B is same as B-A).
+
+// 4. Adjacency List:
+// A way to represent a graph.
+
+// Each vertex has a list of connected vertices.
+
+// 5. Depth-First Search (DFS):
+// A search strategy that explores as far as possible along each branch before backtracking.
+
+// Can be implemented using recursion (recursive DFS) or a stack (iterative DFS).
+
+// Recursive DFS:
+
+// Start at a node.
+
+// Visit it and mark as visited.
+
+// Recursively visit all its unvisited neighbors.
+
+// 6. Breadth-First Search (BFS):
+// A search strategy that explores all neighbors of a node before moving to the next level.
+
+// Implemented using a queue.
+
+// Queue-based BFS:
+
+// Start at a node.
+
+// Visit it and mark as visited.
+
+// Enqueue all its unvisited neighbors.
+
+// Dequeue and repeat.
+
+// Time and Space Complexities of DFS and BFS:
+// 1. Depth-First Search (DFS):
+// Time Complexity:
+
+// O(V+E), where:
+
+// V is the number of vertices.
+
+
+// E is the number of edges.
+
+// In terms of Branching Factor (b) and Solution Depth (d):
+
+// pow(b,d)
+// This is because DFS can potentially explore all branches up to depth 
+// 𝑑
+// d in the worst case.
+
+// Space Complexity:
+
+// O(V) for the visited set (to keep track of visited nodes).
+
+// O(d) for the recursion stack in the worst case (if the graph is a tree).
+
+// In terms of Branching Factor (b) and Solution Depth (d):
+
+// O(d)
+// This is because the recursion stack will only go as deep as the solution depth 
+// 𝑑
+
+
+// 2. Breadth-First Search (BFS):
+// Time Complexity:
+
+// O(V+E), where:
+
+// 𝑉
+// V is the number of vertices.
+
+// 𝐸
+// E is the number of edges.
+
+// In terms of Branching Factor (b) and Solution Depth (d):
+// pow(b,d)
+// This is because BFS explores all nodes level by level, with each level having 
+// 𝑏
+// b branches.
+
+// Space Complexity:
+
+// O(V) for the visited set.
+// O(V) for the queue (in the worst case).
+
+// In terms of Branching Factor (b) and Solution Depth (d):
+// pow(b,d)
+// This is because BFS may store all nodes at a given level before moving to the next.
+ 

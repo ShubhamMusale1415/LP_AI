@@ -1,0 +1,204 @@
+// Implement Greedy search algorithm for any of the following application:
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Function to perform Selection Sort using a Greedy approach
+void selectionSort(vector<int> &arr) {
+    int n = arr.size();
+
+    for (int i = 0; i < n - 1; ++i) {
+        int minIndex = i;
+
+        // Find the minimum element in the unsorted portion
+        for (int j = i + 1; j < n; ++j) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        // Swap the found minimum element with the first unsorted element
+        swap(arr[i], arr[minIndex]);
+    }
+}
+
+// Utility function to display the array
+void displayArray(const vector<int> &arr) {
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    vector<int> arr = {64, 25, 12, 22, 11};
+
+    cout << "Original Array: ";
+    displayArray(arr);
+
+    selectionSort(arr);
+
+    cout << "Sorted Array using Selection Sort (Greedy): ";
+    displayArray(arr);
+
+    return 0;
+}
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Function to perform Selection Sort using a Greedy approach
+void selectionSort(vector<int> &arr) {
+    int n = arr.size();
+
+    for (int i = 0; i < n - 1; ++i) {
+        int minIndex = i;
+
+        // Find the minimum element in the unsorted portion
+        for (int j = i + 1; j < n; ++j) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        // Swap the found minimum element with the first unsorted element
+        swap(arr[i], arr[minIndex]);
+    }
+}
+
+// Utility function to display the array
+void displayArray(const vector<int> &arr) {
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    vector<int> arr = {64, 25, 12, 22, 11};
+
+    cout << "Original Array: ";
+    displayArray(arr);
+
+    selectionSort(arr);
+
+    cout << "Sorted Array using Selection Sort (Greedy): ";
+    displayArray(arr);
+
+    return 0;
+}
+
+// Basic Terminologies for Selection Sort (Greedy Approach)
+// 1. Greedy Algorithm:
+// A problem-solving strategy where decisions are made step-by-step, always choosing the best available option (locally optimal choice) in each step with the hope of finding a globally optimal solution.
+
+// 2. Selection Sort (Greedy Approach):
+// A simple comparison-based sorting algorithm.
+
+// Works on the principle of finding the minimum (or maximum) element from the unsorted part and swapping it with the first unsorted element.
+
+// The process is repeated for the remaining unsorted part of the array.
+
+// 3. Key Steps in Selection Sort:
+// Start from the first position.
+
+// Find the smallest element in the unsorted portion.
+
+// Swap it with the element at the starting position of the unsorted part.
+
+// Move the starting point of the unsorted part one step forward.
+
+// Repeat until the array is fully sorted.
+
+// 4. Example:
+// For an array: [64, 25, 12, 22, 11]
+
+// Step 1: Find the smallest value (11) and swap with the first element:
+
+// [
+// 11
+// ,
+// 25
+// ,
+// 12
+// ,
+// 22
+// ,
+// 64
+// ]
+// [11,25,12,22,64]
+// Step 2: Next, find the smallest value in the remaining unsorted part (12) and swap:
+
+// [
+// 11
+// ,
+// 12
+// ,
+// 25
+// ,
+// 22
+// ,
+// 64
+// ]
+// [11,12,25,22,64]
+// Step 3: Continue until the entire array is sorted:
+
+// [
+// 11
+// ,
+// 12
+// ,
+// 22
+// ,
+// 25
+// ,
+// 64
+// ]
+// [11,12,22,25,64]
+// Time and Space Complexities:
+// 1. Time Complexity:
+// For an array of size 
+// 𝑛
+// n, the Selection Sort has a time complexity of:
+
+// pow(n,2)
+// This is because:
+
+// n−1 passes (outer loop).
+
+// Each pass performs 
+
+// n−i−1 comparisons (inner loop).
+
+// In terms of Branching Factor (b) and Solution Depth (d):
+
+// pow(b,d)=pow(n,2)
+// Branching Factor 
+
+// b≈n because every pass makes 
+
+// n−i comparisons.
+
+// Solution Depth 
+
+// d=n because it goes through each element once.
+
+// 2. Space Complexity:
+
+// O(1) (constant space) because:
+
+// The sorting is done in-place (no extra memory for another array).
+
+// Only a few extra variables are used for swapping and indexing.
+
+// Why Selection Sort is a Greedy Algorithm:
+// At each step, it selects the locally optimal choice (smallest element in the remaining unsorted part).
+
+// It doesn't consider future choices once a swap is made.
+
+
+
+
